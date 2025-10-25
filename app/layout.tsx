@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { Hero } from "@/components/hero";
+import { hasEnvVars } from "@/lib/utils";
+import { EnvVarWarning } from "@/components/env-var-warning";
+import Link from "next/link";
+import { AuthButton } from "@/components/auth-button";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -33,7 +38,24 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main className="min-h-screen flex flex-col items-center">
+            <div className="flex-1 w-full flex flex-col gap-20 items-center">
+              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+                  <div className="flex gap-5 items-center font-semibold">
+                    <Link href={"/"}>My Content Management System</Link>
+                    {/* <div className="flex items-center gap-2">
+                <DeployButton />
+              </div> */}
+                  </div>
+                  {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
+                </div>
+              </nav>
+              <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
+                {children}
+              </div>
+            </div>
+          </main>
         </ThemeProvider>
       </body>
     </html>
